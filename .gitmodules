@@ -1,0 +1,3 @@
+[submodule "third-party/MeshLib"]
+	path = third-party/MeshLib
+	url = https://github.com/cfwen/MeshLib.git
