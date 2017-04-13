@@ -16,7 +16,7 @@ public:\
 class CSimplicialFoliation
 {
 public:
-    enum Mark{SOURCE, SINK, PARALLEL, FREE};
+    enum Mark { SOURCE, SINK, PARALLEL, FREE };
     class CSVertex
     {
         ADD_PROPERTY(short, source)
@@ -49,19 +49,19 @@ public:
     using CPoint = MeshLib::CPoint;
 
 public:
-	CSimplicialFoliation();
-	~CSimplicialFoliation();
+    CSimplicialFoliation();
+    ~CSimplicialFoliation();
 
-	int readMesh(string filename);
+    int readMesh(string filename);
 
-	int setSourceSink();    
-	int calculateFoliationDirectionField();
+    int setSourceSink();
+    int calculateFoliationDirectionField();
 
     int smoothDirectionField(int numIterations = 100);
 
-	int output(string filename);
+    int output(string filename);
 
 private:
-	CMesh * mesh;
+    CMesh * mesh;
 };
 

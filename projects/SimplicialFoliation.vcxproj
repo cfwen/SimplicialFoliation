@@ -11,10 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\main.cpp" />
     <ClCompile Include="..\source\SimplicialFoliation.cpp" />
+    <ClCompile Include="..\source\SimplicialFoliation3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\SimplicialFoliation.h" />
+    <ClInclude Include="..\source\SimplicialFoliation3.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{D62EDCF1-FD57-420F-AC60-5ADFE715B2DF}</ProjectGuid>

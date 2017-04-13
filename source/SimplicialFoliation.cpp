@@ -143,10 +143,6 @@ int CSimplicialFoliation::calculateFoliationDirectionField()
         CHalfEdge * he = front.front();
         front.pop();
         CFace * f = he->face();
-        if (f->id() == 17009)
-        {
-            cout << f->id() << endl;
-        }
         
         CPoint ns = CPoint(0, 0, 0);
         CHalfEdge * hp = NULL;
@@ -277,31 +273,6 @@ int CSimplicialFoliation::setSourceSink()
                 he->mark() = Mark::FREE;
             }
         }
-    }
-    return 0;
-}
-
-int main(int argc, char * argv[])
-{
-    if (argc < 2)
-    {
-        cout << "usage: SimplicialFoliation.exe [mesh]" << endl;
-        return 0;
-    }
-
-    CSimplicialFoliation sf;
-    string filename(argv[1]);
-    sf.readMesh(filename);
-    sf.calculateFoliationDirectionField();
-
-    if (argc == 3)
-    {
-        string outfilename(argv[2]);
-        sf.output(outfilename);
-    }
-    else
-    {
-        sf.output(filename);
     }
     return 0;
 }
