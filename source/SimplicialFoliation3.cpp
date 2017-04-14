@@ -278,6 +278,8 @@ int test()
     CTMesh * tmesh = new CTMesh();
     tmesh->_load("eight.tet");
     tmesh->_write_t("eight.t");
+
+    using it = std::list<int>::iterator;
     
     return 0;
 }

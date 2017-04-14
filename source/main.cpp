@@ -28,10 +28,11 @@ int main(int argc, char * argv[])
     }
     else
     {
-        CSimplicialFoliation sf;
+        CSimplicialFoliation sf;        
         string filename(argv[1]);
         sf.readMesh(filename);
-        sf.calculateFoliationDirectionField();
+        sf.test();
+        //sf.calculateFoliationDirectionField();
 
         string outfilename(argv[2]);
         sf.output(outfilename);
