@@ -26,20 +26,18 @@ int CSimplicialFoliation::calculateFoliationDirectionField()
 {
     setSourceSink();
 
-    for (CMesh::MeshFaceIterator fit(mesh); !fit.end(); ++fit)
+    for (auto f : mesh->faces())    
     {
-        CFace * f = *fit;
         f->touched() = false;
         CHalfEdge * he1 = f->halfedge();
-        CHalfEdge * he2 = he1->he_next();
+        CHalfEdge * he2 = he1->next();
         CPoint v1 = he1->target()->point() - he1->source()->point();
         CPoint v2 = he2->target()->point() - he2->source()->point();
         CPoint n = v1^v2;
         f->normal() = n / n.norm();
     }
-    for (CMesh::MeshHalfEdgeIterator heit(mesh); !heit.end(); ++heit)
+    for (auto he : mesh->halfedges())    
     {
-        CHalfEdge * he = *heit;
         CPoint v = he->target()->point() - he->source()->point();
         v /= v.norm();
         he->normal() = v^he->face()->normal();
@@ -165,31 +163,21 @@ int CSimplicialFoliation::calculateFoliationDirectionField()
                 he->mark() = Mark::SOURCE;
             }
 
-            if (he->he_sym() && !he->he_sym()->face()->touched())
+            if (he->dual() && !he->dual()->face()->touched())
             {
-                if (he->he_sym()->mark() == Mark::FREE)
+                if (he->dual()->mark() == Mark::FREE)
                 {
-                    he->he_sym()->mark() = Mark::SOURCE;
-                    front.push(he->he_sym());
+                    he->dual()->mark() = Mark::SOURCE;
+                    front.push(he->dual());
                 }
             }
         }
         if (f->touched()) continue;
 
-        /*if (hp)
-        {
-            CPoint v = hp->target()->point() - hp->source()->point();
-            v /= v.norm();
-            bool b = he->he_sym()->face()->direction()*v > 0;
-            f->direction() = b ? v : -v;
-        }
-        else
-        {*/
-            if (he->he_sym() && he->he_sym()->face()->touched()) ns += he->he_sym()->face()->direction();
-            ns /= ns.norm();
-            ns -= f->normal()*(f->normal()*ns);
-            f->direction() = ns;
-        /*}*/
+        if (he->dual() && he->dual()->face()->touched()) ns += he->dual()->face()->direction();
+        ns /= ns.norm();
+        ns -= f->normal()*(f->normal()*ns);
+        f->direction() = ns;
         f->index() = ++k;
         f->touched() = true;
     }
@@ -204,9 +192,8 @@ int CSimplicialFoliation::smoothDirectionField(int numIterations)
     int k = 0;
     while (k++ < numIterations)
     {
-        for (CMesh::MeshVertexIterator vit(mesh); !vit.end(); ++vit)
-        {
-            CVertex * v = *vit;
+        for (auto v : mesh->vertices())
+        {        
             CPoint ps = CPoint(0, 0, 0);
             for (CMesh::VertexFaceIterator fit(v); !fit.end(); ++fit)
             {
@@ -232,9 +219,8 @@ int CSimplicialFoliation::smoothDirectionField(int numIterations)
 
 int CSimplicialFoliation::output(string filename)
 {
-    for (CMesh::MeshFaceIterator fit(mesh); !fit.end(); ++fit)
+    for (auto f : mesh->faces())    
     {
-        CFace * f = *fit;
         ostringstream oss;
         oss << "direction=(" << f->direction() << ")";
         oss << " index=(" << f->index() << ")";
@@ -247,9 +233,8 @@ int CSimplicialFoliation::output(string filename)
 
 int CSimplicialFoliation::setSourceSink()
 {
-    for (CMesh::MeshHalfEdgeIterator heit(mesh); !heit.end(); ++heit)
+    for (auto he : mesh->halfedges())
     {
-        CHalfEdge * he = *heit;
         string type = he->edge()->string();
         if (type == string("source"))
         {

@@ -48,6 +48,55 @@ public:
     using CBoundary = MeshLib::CBoundary<CSVertex, CSEdge, CSFace, CSHalfEdge>;
     using CPoint = MeshLib::CPoint;
 
+    
+
+    void test()
+    {
+        /*for (auto f : mesh->faces())
+        {
+            for (auto v : f->vertices())
+            {
+                cout << v->id() << " ";
+            }
+            cout << endl;
+        }*/
+        time_t start = time(NULL);
+        int maxid = 0;
+        for (int i = 0; i < 500; ++i)
+        {
+            maxid = 0;
+            for (auto v : mesh->vertices())
+            {
+                for (CMesh::VertexVertexIterator vit(v); !vit.end(); ++vit)
+                {
+                    CVertex * vj = *vit;
+                    int id = vj->id();
+                    if (id > maxid) maxid = id;
+                }
+            }
+        }
+        cout << maxid << endl;
+        time_t finish = time(NULL);
+        cout << "elapsed time is " << (finish - start) << "s" << endl;
+        
+        start = time(NULL);
+        for (int i = 0; i < 500; ++i)
+        {
+            for (auto v : mesh->vertices())
+            {                
+                for (auto vj : v->vertices())
+                {
+                    int id = vj->id();
+                    if (id > maxid) maxid = id;
+                }
+            }
+        }
+        cout << maxid << endl;
+        finish = time(NULL);
+        cout << "elapsed time is " << (finish - start) << "s" << endl;
+    }
+
+
 public:
     CSimplicialFoliation();
     ~CSimplicialFoliation();
